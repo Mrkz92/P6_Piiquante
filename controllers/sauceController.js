@@ -15,7 +15,7 @@ exports.createSauce = (req, res, next) => {
   sauce
     .save()
     .then((sauce) => res.status(201).json({ message: "Nouvelle sauce enregistrée !" }))
-    .catch((error) => res.status(400).json({ message: error }));
+    .catch(sendStatus(400, "Problème survenu"));
 };
 
 exports.getOneSauce = (req, res, next) => {
