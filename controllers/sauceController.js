@@ -1,21 +1,15 @@
 const { json } = require("express");
 const { HttpStatus } = require("../managers/httpstatus.js");
 const Sauce = require("../models/sauce");
+let { HTTP_PORT = 3000 } = require("../managers/env.js");
 
 exports.createSauce = async (req, res, next) => {
   delete req.body._id;
-  const { userId, name, manufacturer, description, mainPepper, imageUrl, heat } = req.body;
-  const sauce = new Sauce({ userId, name, manufacturer, description, mainPepper, imageUrl, heat });
-  // const sauce = new Sauce({
-  //   userId: req.body.userId,
-  //   name: req.body.name,
-  //   manufacturer: req.body.manufacturer,
-  //   description: req.body.description,
-  //   mainPepper: req.body.mainPepper,
-  //   imageUrl: req.body.imageUrl,
-  //   heat: req.body.heat,
-  // });
-  console.log("Nouvelle sauce", sauce.name);
+  console.log(req.files.image[0]);
+  // Todo: Vérifier userId == req.auth.userId
+  const body = JSON.parse(req.body.sauce);
+  body.imageUrl = `${req.protocol}://${req.hostname}:${HTTP_PORT}/images/${req.files.image[0].filename}`;
+  const sauce = new Sauce(body);
   await sauce.save();
   throw new HttpStatus(201, { message: "Nouvelle sauce enregistrée !" });
 };
@@ -36,10 +30,10 @@ exports.deleteSauce = async (req, res, next) => {
 
 exports.getOneSauce = async (req, res, next) => {
   const sauce = await Sauce.findOne({ _id: req.params.id });
-  throw new HttpStatus(200, json(sauce));
+  throw new HttpStatus(200, sauce);
 };
 
 exports.getAllSauces = async (req, res, next) => {
   const sauces = await Sauce.find();
-  throw new HttpStatus(200, json(sauces));
+  throw new HttpStatus(200, sauces);
 };

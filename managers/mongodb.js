@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { MONGODB_URL } = require("./env.js");
+const { MONGODB_URL } = require("./env");
 
 if (!MONGODB_URL) throw "MONGODB_URL must be set in .env.local";
 
