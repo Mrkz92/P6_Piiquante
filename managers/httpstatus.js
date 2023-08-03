@@ -25,7 +25,9 @@ function statusMW(error, req, res, next) {
   if (code >= 100 && code < 300) data = message;
   if (code >= 300 && code < 400) res.header("Location", message);
   if (code >= 400 && code < 500) data = message;
-  if (code >= 500 && code < 600) console.error(error);
+  if (code >= 500 && code < 600)
+    console.error(error.stack.split("\n").slice(0, 5).join("\n").replaceAll(process.cwd(), ""));
+  console.log(process.cwd());
   res.json(data);
 }
 

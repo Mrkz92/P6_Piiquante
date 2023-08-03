@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
-const jwt = require("../managers/jwt.js");
+const jwtManager = require("../managers/jwt.js");
 const { HttpStatus } = require("../managers/httpstatus.js");
 
 exports.signup = async (req, res, next) => {
@@ -20,5 +20,5 @@ exports.login = async (req, res, next) => {
   if (!valid) throw new HttpStatus(401, { message: "Paire login/mot de passe incorrecte" });
 
   const userId = user._id;
-  throw new HttpStatus(200, { userId, token: jwt.sign({ userId }) });
+  throw new HttpStatus(200, { userId, token: jwtManager.sign({ userId }) });
 };
